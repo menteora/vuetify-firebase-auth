@@ -50,17 +50,32 @@
     data () {
       return {
         drawer: false,
-        items: [{
-          icon: 'home',
-          title: 'Home',
-          to: '/'
-        },
-        {
-          icon: 'label',
-          title: 'HelloWorld',
-          to: '/hello'
-        }],
         title: 'Vuetify.js'
+      }
+    },
+    computed: {
+      items () {
+        let items = [
+          {
+            icon: 'home',
+            title: 'Home',
+            to: '/'
+          },
+          {
+            icon: 'label',
+            title: 'Signin',
+            to: '/signin'
+          }]
+        if (this.$store.getters.user) {
+          items = [
+            {
+              icon: 'label',
+              title: 'HelloWorld',
+              to: '/hello'
+            }
+          ]
+        }
+        return items
       }
     }
   }
