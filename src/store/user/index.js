@@ -21,7 +21,7 @@ export default {
       })
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          commit('autoSignIn', user)
+          commit('setUser', user)
         }
       })
     },
@@ -178,6 +178,7 @@ export default {
       })
     },
     logout ({commit}) {
+      console.log('logout action')
       firebase.auth().signOut()
       commit('setUser', null)
     }

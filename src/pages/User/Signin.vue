@@ -35,7 +35,7 @@ export default {
   mixins: [validationMixin],
   data () {
     return {
-      msg: 'Signin',
+      title: 'Signin',
       email: '',
       password: ''
     }
@@ -43,11 +43,22 @@ export default {
   methods: {
     submit () {
       this.$v.$touch()
+      this.$store.dispatch('signUserIn', {email: this.email, password: this.password})
     },
     clear () {
       this.$v.$reset()
       this.email = ''
       this.password = ''
+    },
+    onDismissed () {
+      this.$store.dispatch('clearError')
+    }
+  },
+  watch: {
+    user (value) {
+      if (value !== null && value !== undefined) {
+        this.$router.push('/hello')
+      }
     }
   },
   validations: {
@@ -55,6 +66,12 @@ export default {
     password: { required }
   },
   computed: {
+    user () {
+      return this.$store.getters.user
+    },
+    error () {
+      return this.$store.getters.error
+    },
     emailErrors () {
       const errors = []
       if (!this.$v.email.$dirty) return errors
@@ -64,8 +81,8 @@ export default {
     },
     passwordErrors () {
       const errors = []
-      if (!this.$v.email.$dirty) return errors
-      !this.$v.password.required && errors.push('E-mail is required')
+      if (!this.$v.password.$dirty) return errors
+      !this.$v.password.required && errors.push('Password is required')
       return errors
     }
   }

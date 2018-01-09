@@ -40,43 +40,68 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
-        <v-container fluid><router-view></router-view></v-container>
+        <v-container>
+          <v-layout row v-if="error">
+            <v-flex xs12 sm6 offset-sm3>
+              <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+            </v-flex>
+          </v-layout>
+          <router-view></router-view>
+        </v-container>
     </v-content>
   </v-app>
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        drawer: false,
-        title: 'Vuetify.js'
-      }
+import AppAlert from './components/shared/AppAlert'
+
+export default {
+  components: {
+    AppAlert
+  },
+  data () {
+    return {
+      drawer: false,
+      title: 'Vuetify.js'
+    }
+  },
+  methods: {
+    onDismissed () {
+      this.$store.dispatch('clearError')
+    }
+  },
+  computed: {
+    error () {
+      return this.$store.getters.error
     },
-    computed: {
-      items () {
-        let items = [
+    items () {
+      let items = [
+        {
+          icon: 'home',
+          title: 'Home',
+          to: '/'
+        },
+        {
+          icon: 'label',
+          title: 'Signin',
+          to: '/signin'
+        }]
+      if (this.$store.getters.user) {
+        items = [
           {
-            icon: 'home',
-            title: 'Home',
-            to: '/'
+            icon: 'label',
+            title: 'HelloWorld',
+            to: '/hello'
           },
           {
             icon: 'label',
-            title: 'Signin',
-            to: '/signin'
-          }]
-        if (this.$store.getters.user) {
-          items = [
-            {
-              icon: 'label',
-              title: 'HelloWorld',
-              to: '/hello'
-            }
-          ]
-        }
-        return items
+            title: 'Logout',
+            to: '/logout'
+          }
+        ]
       }
+      return items
     }
   }
+}
 </script>

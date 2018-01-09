@@ -25,6 +25,11 @@ export default new Router({
       path: '/signin',
       name: 'Signin',
       component: Signin
+    },
+    {
+      path: '/logout',
+      name: 'Logout',
+      beforeEnter: AuthGuard
     }
   ]
 })
